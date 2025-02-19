@@ -53,7 +53,7 @@ const validateJWT = async (req, res, next) => {
 const verifyAuthor = async (req, res, next) => {
   if (req.user.status !== "author") {
     return res.status(403).json({
-      message: "User not authorized to create a post",
+      message: "User not authorized for this action",
       status: 403,
     });
   }

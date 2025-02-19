@@ -31,7 +31,6 @@ model Post {
   createdAt DateTime  @default(now())
   likes     Int       @default(0)
   comments  Comment[]
-  published Boolean   @default(false)
 }
 
 model Comment {

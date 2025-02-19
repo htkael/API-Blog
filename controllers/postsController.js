@@ -95,3 +95,69 @@ exports.createPost = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.deletePost = async (req, res, next) => {
+  try {
+    const post = await prisma.post.delete({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+
+    res.json({
+      message: "Post deleted successfully",
+      post: post,
+    });
+  } catch (err) {
+    if (err.code === "P2025") {
+      err.message = "Post not found";
+      err.status = 404;
+    } else {
+      err.message = "error deleting post";
+      err.status = 500;
+    }
+    next(err);
+  }
+};
+
+exports.editPost = async (req, res, next) => {
+  try {
+    const { title, content } = req.body;
+    if (!title || !content) {
+      return res.status(400).json({
+        message: "Title and content are required",
+        formData: req.body,
+      });
+    }
+    const post = await prisma.post.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        title: title,
+        content: content,
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+            status: true,
+          },
+        },
+      },
+    });
+    return res.json({
+      message: "Post updated successfully",
+      post: post,
+    });
+  } catch (err) {
+    if (err.code === "P2025") {
+      err.message = "Post not found";
+      err.status = 404;
+    } else {
+      err.message = "error editing post";
+      err.status = 500;
+    }
+    next(err);
+  }
+};
