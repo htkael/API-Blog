@@ -4,11 +4,13 @@ const app = express();
 const indexRouter = require("./routes/indexRouter");
 const error404 = require("./middleware/404");
 const generalError = require("./middleware/generalError");
+const cors = require("cors");
 
 console.log("Server Start...");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
 app.use("/api", indexRouter);
 
