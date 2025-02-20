@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.signup = [
   registerValidation,
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -50,7 +50,7 @@ exports.login = async (req, res, next) => {
 
     if (!user) {
       return res.status(401).json({
-        message: "Incorrect username",
+        errors: [{ msg: "Incorrect username" }],
       });
     }
     console.log("User found:", user);
@@ -59,7 +59,7 @@ exports.login = async (req, res, next) => {
     console.log("Password match", match);
     if (!match) {
       return res.status(401).json({
-        message: "Incorrect Password",
+        errors: [{ msg: "Incorrect password" }],
       });
     }
     jwt.sign(
