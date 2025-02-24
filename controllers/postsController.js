@@ -33,7 +33,11 @@ exports.getSinglePost = async (req, res, next) => {
         id: id,
       },
       include: {
-        comments: true,
+        comments: {
+          include: {
+            author: true,
+          },
+        },
         author: {
           select: {
             username: true,
