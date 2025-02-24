@@ -161,3 +161,28 @@ exports.editPost = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.addLike = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const post = await prisma.post.findUnique({
+      where: { id: id },
+    });
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: id,
+      },
+      data: {
+        likes: post.likes + 1,
+      },
+    });
+    res.json({
+      message: "Post liked!",
+      updatedPost,
+    });
+  } catch (err) {
+    err.message = "Could not like post";
+    err.status = 500;
+    next(err);
+  }
+};
