@@ -164,7 +164,7 @@ exports.editPost = async (req, res, next) => {
 
 exports.addLike = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const post = await prisma.post.findUnique({
       where: { id: id },
     });
